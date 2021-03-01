@@ -5,10 +5,12 @@ import org.junit.jupiter.api.Test
 
 internal class ModelTest {
 
+    var artur = Human("Artur")
+    val door = Door("243")
+    var george = Monkey("George", type = TypeMonkey.Mandarill, wool = TypeWool.Short)
+
     @Test
     fun `human actions`() {
-        var artur = Human("Artur")
-        val door = Door("243")
         artur.doAction(ActionType.Closing, door)
         assertAll(
             { assertEquals(ActionType.Closing, artur.actionStatus.first) },
@@ -22,11 +24,13 @@ internal class ModelTest {
 
     @Test
     fun `monkey stats`() {
-        var george = Monkey("George", type = TypeMonkey.Mandarill, wool = TypeWool.Short)
         assertAll(
-            { assertEquals(HandsStatus.Clean, george.handsStatus) },
             {
-                george.getDirty()
+                george.getHandsClean()
+                assertEquals(HandsStatus.Clean, george.handsStatus)
+            },
+            {
+                george.getHandsDirty()
                 assertEquals(HandsStatus.Dirty, george.handsStatus)
             }
         )
@@ -34,10 +38,11 @@ internal class ModelTest {
 
     @Test
     fun `screaming at someone`() {
-        var artur = Human("Artur")
-        var george = Monkey("George", type = TypeMonkey.Mandarill, wool = TypeWool.Short)
         assertAll(
-            { assertEquals(HumanoidCondition.Calm, george.condition) },
+            {
+                george.calm()
+                assertEquals(HumanoidCondition.Calm, george.condition)
+            },
             {
                 george screamAt artur
                 assertEquals(ActionType.Screaming, george.actionStatus.first)
@@ -48,8 +53,6 @@ internal class ModelTest {
 
     @Test
     fun `hearing voice`() {
-        var artur = Human("Artur")
-        var george = Monkey("George", type = TypeMonkey.Mandarill, wool = TypeWool.Short)
         assertEquals(VoiceType.tnin, artur hearVoice george)
     }
 }

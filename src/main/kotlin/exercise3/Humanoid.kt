@@ -2,7 +2,6 @@ package exercise3
 
 abstract class Humanoid : HumAction {
     abstract var name: String // Имя
-    abstract var condition: HumanoidCondition // Состояние(настроение)
     abstract val voiceType: VoiceType
 }
 
@@ -31,6 +30,7 @@ enum class VoiceType {
 interface HumAction {
     var actionStatus: Pair<ActionType, Any?>
     var handsStatus: HandsStatus
+    var condition: HumanoidCondition // Состояние(настроение)
 
     infix fun doAction(action: ActionType): Boolean {
         actionStatus = Pair(action, null)
@@ -44,9 +44,18 @@ interface HumAction {
         return true
     }
 
-    fun getDirty() {
+    fun getHandsDirty() {
         handsStatus = HandsStatus.Dirty
     }
+
+    fun getHandsClean() {
+        handsStatus = HandsStatus.Clean
+    }
+
+    fun calm(){
+        condition = HumanoidCondition.Calm
+    }
+
 
     infix fun screamAt(creature: Humanoid) {
         this.doAction(ActionType.Screaming)
